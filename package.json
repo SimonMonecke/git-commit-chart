@@ -1,0 +1,19 @@
+{
+  "name": "git-commit-chart",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Monecke",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.5.5",
+    "command-line-args": "^3.0.3",
+    "command-line-usage": "^3.0.7",
+    "moment": "^2.16.0",
+    "simple-git": "^1.62.0"
+  }
+}
