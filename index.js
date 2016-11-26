@@ -1,3 +1,4 @@
+const path = require('path');
 const args = require('./lib/cli')();
 const simpleGit = require('simple-git')('/home/simon/programming/javascript/others-repos/node')
 // const simpleGit = require('simple-git')('/home/simon/programming/tmp/linux')
@@ -11,7 +12,6 @@ const chart = require('./lib/gui/chart')();
 var granularitiesOrder = ['days', 'weeks', 'months'];
 var gitLog = [];
 
-header.setRepoName('nodeJs');
 header.setGranularity(granularitiesOrder[0]);
 header.setFromDate('2014-11-01');
 header.setToDate('2016-02-31');
@@ -22,8 +22,6 @@ screen.detach(splashscreen);
 screen.append(header.getBlessedComponent());
 screen.append(chart);
 screen.append(footer);
-
-
 
 function updateChart() {
   if (gitLog.length > 0) {
@@ -59,6 +57,10 @@ if (args.since) {
 if (args.until) {
   gitLogOptions['--until'] = moment(args.untils).format('YYYY-MM-DD');
 }
+
+simpleGit.revparse(['--show-toplevel'], function(err, data) {
+  header.setRepoName(path.basename(data).trim());
+});
 
 simpleGit.log(gitLogOptions, function (err, data) {
   let since = args.since;
