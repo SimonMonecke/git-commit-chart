@@ -5,10 +5,10 @@ const simpleGit = require('simple-git')('/home/simon/programming/javascript/othe
 const moment = require('moment');
 
 const screen = require('blessed').screen();
-const splashscreen = require('./lib/gui/splashscreen')();
+const splashscreen = require('./lib/gui/splashscreen');
 const header = require('./lib/gui/header');
-const footer = require('./lib/gui/footer')();
-const chart = require('./lib/gui/chart')();
+const footer = require('./lib/gui/footer');
+const chart = require('./lib/gui/chart');
 var granularitiesOrder = ['days', 'weeks', 'months'];
 var gitLog = [];
 
@@ -16,12 +16,12 @@ header.setGranularity(granularitiesOrder[0]);
 header.setFromDate('2014-11-01');
 header.setToDate('2016-02-31');
 
-screen.append(splashscreen);
+screen.append(splashscreen.getBlessedComponent());
 screen.render();
-screen.detach(splashscreen);
+screen.detach(splashscreen.getBlessedComponent());
 screen.append(header.getBlessedComponent());
-screen.append(chart);
-screen.append(footer);
+screen.append(chart.getBlessedComponent());
+screen.append(footer.getBlessedComponent());
 
 function updateChart() {
   if (gitLog.length > 0) {
@@ -41,7 +41,7 @@ function updateChart() {
         buckets[i] = 0;
       }
     }
-    chart.setData({
+    chart.getBlessedComponent().setData({
       title: '',
       x: new Array(buckets.length).fill('.'),
       y: buckets.reverse()
