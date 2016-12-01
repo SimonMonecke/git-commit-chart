@@ -11,6 +11,9 @@ const footer = require('./lib/gui/footer');
 const chart = require('./lib/gui/chart');
 var granularitiesOrder = ['days', 'weeks', 'months'];
 var gitLog = [];
+var fitToScreen = true;
+var scrollLeft = 0;
+var buckets = [];
 
 header.setGranularity(granularitiesOrder[0]);
 header.setFromDate('2014-11-01');
@@ -23,11 +26,11 @@ screen.append(header.getBlessedComponent());
 screen.append(chart.getBlessedComponent());
 screen.append(footer.getBlessedComponent());
 
-function updateChart() {
+function recalculateBucketsAndUpdateChart() {
   if (gitLog.length > 0) {
     let since = args.since;
     let until = args.until ? moment(args.until) : moment();
-    let buckets = [];
+    buckets = [];
     for (let i = 0; i < gitLog.length; i++) {
       let currentDiff = until.diff(gitLog[i], granularitiesOrder[0]);
       if (!!buckets[currentDiff]) {
@@ -41,13 +44,19 @@ function updateChart() {
         buckets[i] = 0;
       }
     }
-    chart.getBlessedComponent().setData({
-      title: '',
-      x: new Array(buckets.length).fill('.'),
-      y: buckets.reverse()
-    });
-    screen.render();
+    buckets = buckets.reverse();
+    updateChart();
   }
+}
+
+function updateChart() {
+  chart.getBlessedComponent().setData({
+    scrollLeft: scrollLeft,
+    fitToScreen: fitToScreen,
+    x: new Array(buckets.length).fill('.'),
+    y: buckets
+  });
+  screen.render();
 }
 
 var gitLogOptions = {};
@@ -71,12 +80,28 @@ simpleGit.log(gitLogOptions, function (err, data) {
       gitLog.push(currentDate);
     }
   }
-  updateChart();
+  recalculateBucketsAndUpdateChart();
 });
 
 screen.key('g', function() {
   granularitiesOrder.push(granularitiesOrder.shift());
   header.setGranularity(granularitiesOrder[0]);
+  scrollLeft = 0;
+  recalculateBucketsAndUpdateChart();
+});
+
+screen.key('f', function() {
+  fitToScreen = !fitToScreen;
+  recalculateBucketsAndUpdateChart();
+});
+
+screen.key('left', function() {
+  scrollLeft -= 1;
+  updateChart();
+});
+
+screen.key('right', function() {
+  scrollLeft += 1;
   updateChart();
 });
 
