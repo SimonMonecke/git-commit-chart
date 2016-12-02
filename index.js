@@ -12,7 +12,6 @@ const chart = require('./lib/gui/chart');
 var granularitiesOrder = ['days', 'weeks', 'months'];
 var gitLog = [];
 var fitToScreen = true;
-var scrollLeft = 0;
 var buckets = [];
 
 header.setGranularity(granularitiesOrder[0]);
@@ -51,7 +50,6 @@ function recalculateBucketsAndUpdateChart() {
 
 function updateChart() {
   chart.getBlessedComponent().setData({
-    scrollLeft: scrollLeft,
     fitToScreen: fitToScreen,
     x: new Array(buckets.length).fill('.'),
     y: buckets
@@ -86,7 +84,6 @@ simpleGit.log(gitLogOptions, function (err, data) {
 screen.key('g', function() {
   granularitiesOrder.push(granularitiesOrder.shift());
   header.setGranularity(granularitiesOrder[0]);
-  scrollLeft = 0;
   recalculateBucketsAndUpdateChart();
 });
 
@@ -96,13 +93,13 @@ screen.key('f', function() {
 });
 
 screen.key('left', function() {
-  scrollLeft -= 1;
-  updateChart();
+  chart.getBlessedComponent().scrollLeft();
+  screen.render();
 });
 
 screen.key('right', function() {
-  scrollLeft += 1;
-  updateChart();
+  chart.getBlessedComponent().scrollRight();
+  screen.render();
 });
 
 screen.key('q', function() {
