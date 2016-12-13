@@ -29,21 +29,26 @@ function recalculateBucketsAndUpdateChart() {
   if (gitLog.length > 0) {
     let since = args.since;
     let until = args.until ? moment(args.until) : moment();
-    buckets = [];
+    buckets = {
+      x: [],
+      y: []
+    };
     for (let i = 0; i < gitLog.length; i++) {
       let currentDiff = until.diff(gitLog[i], granularitiesOrder[0]);
-      if (!!buckets[currentDiff]) {
-        buckets[currentDiff]++;
+      if (!!buckets.y[currentDiff]) {
+        buckets.y[currentDiff]++;
       } else {
-        buckets[currentDiff] = 1;
+        buckets.y[currentDiff] = 1;
       }
     }
-    for (let i = 0; i < buckets.length; i++) {
-      if (!buckets[i]) {
-        buckets[i] = 0;
+    for (let i = 0; i < buckets.y.length; i++) {
+      if (!buckets.y[i]) {
+        buckets.y[i] = 0;
       }
+      buckets.x.push(moment(until).subtract(i, granularitiesOrder[0]));
     }
-    buckets = buckets.reverse();
+    buckets.x = buckets.x.reverse();
+    buckets.y = buckets.y.reverse();
     updateChart();
   }
 }
@@ -51,8 +56,8 @@ function recalculateBucketsAndUpdateChart() {
 function updateChart() {
   chart.getBlessedComponent().setData({
     fitToScreen: fitToScreen,
-    x: new Array(buckets.length).fill('.'),
-    y: buckets
+    x: buckets.x,
+    y: buckets.y
   });
   screen.render();
 }
