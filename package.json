@@ -12,6 +12,7 @@
     "blessed": "^0.1.81",
     "command-line-args": "^3.0.3",
     "command-line-usage": "^3.0.7",
+    "drawille-canvas-blessed-contrib": "^0.1.3",
     "moment": "^2.16.0",
     "simple-git": "^1.62.0"
   }
