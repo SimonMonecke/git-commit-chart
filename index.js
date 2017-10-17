@@ -1,7 +1,6 @@
 const path = require('path');
 const args = require('./lib/cli')();
-const simpleGit = require('simple-git')('/home/simon/programming/javascript/others-repos/node')
-// const simpleGit = require('simple-git')('/home/simon/programming/tmp/linux')
+const simpleGit = require('simple-git')(process.argv[2])
 const moment = require('moment');
 
 const screen = require('blessed').screen();
