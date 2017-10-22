@@ -93,6 +93,7 @@ screen.key('g', function() {
 
 screen.key('f', function() {
   fitToScreen = !fitToScreen;
+  header.toggleFitToScreen();
   recalculateBucketsAndUpdateChart();
 });
 
