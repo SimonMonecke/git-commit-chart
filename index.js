@@ -89,12 +89,18 @@ screen.key('g', function() {
   granularitiesOrder.push(granularitiesOrder.shift());
   header.setGranularity(granularitiesOrder[0]);
   recalculateBucketsAndUpdateChart();
+  const contentFits = chart.getBlessedComponent().contentFits();
+  footer.showScrollKeys(!contentFits);
+  screen.render();
 });
 
 screen.key('f', function() {
   fitToScreen = !fitToScreen;
   header.toggleFitToScreen();
   recalculateBucketsAndUpdateChart();
+  const contentFits = chart.getBlessedComponent().contentFits();
+  footer.showScrollKeys(!contentFits);
+  screen.render();
 });
 
 screen.key('left', function() {
