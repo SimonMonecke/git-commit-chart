@@ -33,8 +33,8 @@ if (!!args.since) {
   gitLogOptions['--since'] = since.format('YYYY-MM-DD');
 }
 if (!!args.until) {
-  until = args.until;
-  gitLogOptions['--until'] = until.format('YYYY-MM-DD');
+  until = args.until.hour(23).minute(59);
+  gitLogOptions['--until'] = until.format('YYYY-MM-DD HH:mm');
 }
 
 repo.revparse(['--show-toplevel'], function (err, data) {
